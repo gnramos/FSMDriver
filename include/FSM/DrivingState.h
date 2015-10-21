@@ -29,13 +29,28 @@ public:
     /** Defines the driving policy of the state.
      *
      * @param cs the driver's perception of the environment. */
-    virtual CarControl drive(CarState &cs) = 0;
+    virtual CarControl drive(CarState &cs);
 
     /** Called when entering the state. */
     virtual void enter();
 
     /** Called when exiting the state. */
     virtual void exit();
+
+
+
+/**************************************************************************
+ * Modularização*/
+
+protected:
+    /*Declarar os métodos e implementar  no DrivingState.cpp*/
+    virtual float get_steer(CarState &cs) = 0;
+    virtual int get_gear(CarState &cs) = 0;     
+    virtual float get_accel(CarState &cs) = 0;
+    virtual float get_brake(CarState &cs) = 0;
+    virtual float get_clutch(CarState &cs) = 0;
+
+    
 };
 
 #endif // UNB_FSMDRIVER_DRIVING_STATE_H

@@ -28,3 +28,21 @@ void
 DrivingState::exit() {
 	/* Nothing. */
 }
+
+
+/**************************************************************************
+ * Modularização*/
+
+CarControl 
+drive(CarState &cs) {
+    float steer = get_steer(cs);
+    int gear = get_gear(cs);     
+    float accel  = get_accel(cs);
+    float brake = get_brake(cs);
+    float clutch = get_clutch(cs);
+
+    return CarControl(accel, brake, gear, steer, clutch);
+}
+
+
+

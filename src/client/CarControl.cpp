@@ -165,3 +165,39 @@ CarControl::setFocus(int focus)
 { 
         this->focus = focus;
 };
+
+
+
+/**************************************************************************
+ * Modularização
+
+float 
+CarControl::get_steer(CarState &cs)
+{
+	return this->steer;
+};
+
+int 
+CarControl::get_gear(CarState &cs)
+{
+	return this->gear;
+};  
+
+float 
+CarControl::get_accel(CarState &cs)
+{
+	return this->accel
+};
+
+float 
+CarControl::get_brake(CarState &cs)
+{
+	return this->brake;
+};
+
+float CarControl::get_clutch(CarState &cs)
+{
+	return this->clutch;
+};
+
+*/

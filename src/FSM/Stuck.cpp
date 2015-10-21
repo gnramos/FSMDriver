@@ -104,3 +104,45 @@ Stuck::getInitialPos(CarState &cs) {
 	return (track_initial_pos == 0 ? cs.getTrackPos() : track_initial_pos);
 }
 
+
+
+
+/**************************************************************************
+ * Modularização*/
+float 
+Stuck::get_steer(CarState &cs) {
+    if(abs(cs.getAngle()) > M_PI) // around 180 graus
+    return (track_initial_pos > 0 ? -1 : 1);
+
+    return (track_initial_pos > 0 ? 1 : -1);
+}
+
+/*Implementação do InsideTrack -> adaptar para o estado Stuck*/
+int
+Stuck::get_gear(cs){
+    int gear = cs.getGear();
+    if(gear <= 0) return start_gear;
+
+    int rpm = cs.getRpm();
+
+    if(shouldIncreaseGear(gear, rpm)) ++gear;
+    else if(shouldDecreaseGear(gear, rpm)) --gear;
+
+    return gear;
+}
+
+float
+Stuck::get_accel(cs){
+    return cs.getSpeedX() > target_speed ? 0:1;
+}
+
+float
+Stuck::get_brake(cs){
+    return cs.getSpeedX() > target_speed ? 0.3:0;
+}
+
+float
+Stuck::get_clutch(cs){
+    return 0;
+}
+

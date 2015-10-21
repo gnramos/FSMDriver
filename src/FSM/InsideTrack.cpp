@@ -95,6 +95,7 @@ InsideTrack::isFacingWrongWay(CarState &cs) {
     return cs.getAngle() < -M_PI/2 || cs.getAngle() > M_PI/2;
 }
 
+/*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
 float
 InsideTrack::getAccel(CarState &cs) {
     return cs.getSpeedX() > target_speed ? 0:1;
@@ -114,7 +115,7 @@ float
 InsideTrack::findFarthestDirection(CarState &cs) {
     float farthestSensor = -INFINITY;
     float farthestDirection = 0;
-       for (int i = 0; i < 19; i++) {
+       for (int i = 0; i < 19; i++) { /*Percorre os sensores de pista e guarda o de maior valor*/
           if (farthestSensor < cs.getTrack(i)) {
             farthestSensor = cs.getTrack(i);
             farthestDirection = i;
@@ -138,4 +139,41 @@ InsideTrack::getSteer(CarState &cs) {
 
 InsideTrack::~InsideTrack() {
     /* Nothing. */
+}
+
+
+
+/**************************************************************************
+ * Modularização*/
+float 
+InsideTrack::get_steer(CarState &cs) {
+    return isFacingWrongWay(cs) ? cs.getAngle() : findFarthestDirection(cs);
+}
+
+int
+InsideTrack::get_gear(cs){
+    int gear = cs.getGear();
+    if(gear <= 0) return start_gear;
+
+    int rpm = cs.getRpm();
+
+    if(shouldIncreaseGear(gear, rpm)) ++gear;
+    else if(shouldDecreaseGear(gear, rpm)) --gear;
+
+    return gear;
+}
+
+float
+InsideTrack::get_accel(cs){
+    return cs.getSpeedX() > target_speed ? 0:1;
+}
+
+float
+InsideTrack::get_brake(cs){
+    return cs.getSpeedX() > target_speed ? 0.3:0;
+}
+
+float
+InsideTrack::get_clutch(cs){
+    return 0;
 }

@@ -74,3 +74,50 @@ OutOfTrack::getSteer(CarState &cs) {
 OutOfTrack::~OutOfTrack() {
     /* Nothing. */
 }
+
+
+
+/**************************************************************************
+ * Modularização*/
+float 
+InsideTrack::get_steer(CarState &cs) {
+    float angle = cs.getAngle();
+    /** Aim to go back to the track with a range of angles, between MIN_RETURN_ANGLE and MAX_RETURN_ANGLE with relation to the axis of track*/
+    if(cs.getTrackPos() > 0){
+        if(angle > max_return_angle) return 1;
+        if(angle < min_return_angle) return -1;
+    } else {
+        if(angle < -(max_return_angle)) return -1;
+        if(angle > -(min_return_angle)) return 1;
+    }
+
+    return 0;
+}
+
+int
+InsideTrack::get_gear(cs){
+    if(cs.getSpeedX() > velocity_gear_4) return cs.getGear(); //out of track the gear control based on velocity seems better than the one based on rpm
+                                                            /* @todo need reverse behavior */
+    if(cs.getSpeedX() > velocity_gear_3) return 3;
+    if(cs.getSpeedX() > velocity_gear_2) return 2;
+
+    return 1;
+}
+
+float
+InsideTrack::get_accel(cs){
+    return(1-abs(cs.getSpeedY())*negative_accel_percent); /* @todo can be negative, need some fix */
+}
+
+float
+InsideTrack::get_brake(cs){
+    if(cs.getSpeedX() < 0) return 1;
+    if(abs(cs.getSpeedY()) > max_skidding) return 0.1;
+
+    return 0;
+}
+
+float
+InsideTrack::get_clutch(cs){
+    return 0;
+}
