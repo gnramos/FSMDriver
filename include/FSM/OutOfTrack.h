@@ -40,6 +40,12 @@ public:
                int _vg3 = 70, int _vg2 = 40, float _maxra = 0.7,
                float _minra = 0.5);
 
+    virtual float get_steer(CarState &cs);
+    virtual int get_gear(CarState &cs);
+    virtual float get_accel(CarState &cs);
+    virtual float get_brake(CarState &cs);
+    virtual float get_clutch(CarState &cs);
+
     /* Inherited documentation. */
     CarControl drive(CarState &);
 

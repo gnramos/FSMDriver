@@ -41,6 +41,12 @@ public:
      */
     Stuck(float ss = 5.0, int mrd = 100, int mst = 300, int msst = 50);
 
+    virtual float get_steer(CarState &cs);
+    virtual int get_gear(CarState &cs);
+    virtual float get_accel(CarState &cs);
+    virtual float get_brake(CarState &cs);
+    virtual float get_clutch(CarState &cs);
+
     /** Destructor. */
     ~Stuck();
 
@@ -58,6 +64,9 @@ public:
     void setParameters(float ss, int mrd, int mst, int msst);
 
 private:
+    /** start_gear is the first gear
+    */
+    int start_gear = 1;
     /** stuck_speed is the value which bellow it a car may be stuck
     */
     float stuck_speed;
