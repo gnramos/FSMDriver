@@ -1,11 +1,11 @@
 /**  @file: InsideTrack.cpp
  *
  * https://github.com/bruno147/fsmdriver
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
- * version. 
+ * version.
  */
 
 #include "InsideTrack.h"
@@ -14,17 +14,6 @@ InsideTrack::InsideTrack(int _sg, int _lgl, int _lrpm, int _arpm,
                          int _hrpm, float _bs, float _sf) {
 
     setParameters(_sg, _lgl, _lrpm, _arpm, _hrpm, _bs, _sf);
-}
-
-CarControl
-InsideTrack::drive(CarState &cs) {
-	float steer = getSteer(cs);
-    setTargetSpeed(cs);
-	int gear = getGear(cs);
-	float accel  = getAccel(cs);
-    float brake = getBrake(cs);
-	float clutch = 0;
-	return CarControl(accel, brake, gear, steer, clutch);
 }
 
 void
@@ -38,19 +27,6 @@ InsideTrack::setParameters( int _sg, int _lgl, int _lrpm, int _arpm,
     base_speed = _bs;
     speed_factor = _sf;
     current_gear = start_gear;
-}
-
-int
-InsideTrack::getGear(CarState &cs) {
-    int gear = cs.getGear();
-    if(gear <= 0) return start_gear;
-
-    int rpm = cs.getRpm();
-
-    if(shouldIncreaseGear(gear, rpm)) ++gear;
-    else if(shouldDecreaseGear(gear, rpm)) --gear;
-
-    return gear;
 }
 
 bool
@@ -95,17 +71,6 @@ InsideTrack::isFacingWrongWay(CarState &cs) {
     return cs.getAngle() < -M_PI/2 || cs.getAngle() > M_PI/2;
 }
 
-/*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
-float
-InsideTrack::getAccel(CarState &cs) {
-    return cs.getSpeedX() > target_speed ? 0:1;
-}
-
-float
-InsideTrack::getBrake(CarState cs) {
-    return cs.getSpeedX() > target_speed ? 0.3:0;
-}
-
 void
 InsideTrack::setTargetSpeed(CarState &cs) {
     this->target_speed = base_speed + speed_factor*this->distance;
@@ -132,11 +97,6 @@ InsideTrack::normalizeSteer(float angle) {
     return angle/maxsteer;
 }
 
-float
-InsideTrack::getSteer(CarState &cs) {
-    return isFacingWrongWay(cs) ? cs.getAngle() : findFarthestDirection(cs);
-}
-
 InsideTrack::~InsideTrack() {
     /* Nothing. */
 }
@@ -145,13 +105,13 @@ InsideTrack::~InsideTrack() {
 
 /**************************************************************************
  * Modularização*/
-float 
+float
 InsideTrack::get_steer(CarState &cs) {
     return isFacingWrongWay(cs) ? cs.getAngle() : findFarthestDirection(cs);
 }
 
 int
-InsideTrack::get_gear(cs){
+InsideTrack::get_gear(CarState &cs){
     int gear = cs.getGear();
     if(gear <= 0) return start_gear;
 
@@ -163,17 +123,19 @@ InsideTrack::get_gear(cs){
     return gear;
 }
 
+/*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
 float
-InsideTrack::get_accel(cs){
-    return cs.getSpeedX() > target_speed ? 0:1;
+InsideTrack::get_accel(CarState &cs){
+    setTargetSpeed(cs);
+    return cs.getSpeedX() > target_speed ? 0 : 1;
 }
 
 float
-InsideTrack::get_brake(cs){
-    return cs.getSpeedX() > target_speed ? 0.3:0;
+InsideTrack::get_brake(CarState &cs){
+    return cs.getSpeedX() > target_speed ? 0.3 : 0;
 }
 
 float
-InsideTrack::get_clutch(cs){
+InsideTrack::get_clutch(CarState &cs){
     return 0;
 }
