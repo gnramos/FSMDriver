@@ -22,25 +22,6 @@ Stuck::~Stuck() {
     /* Nothing */
 }
 
-CarControl
-Stuck::drive(CarState &cs) {
-    ++elapsed_ticks;
-
-    track_initial_pos = getInitialPos(cs);
-
-    if(notStuckAnymore(cs) || hasBeenStuckLongEnough()) {
-        elapsed_ticks = 0;
-        slow_speed_ticks = 0;
-        track_initial_pos = 0;
-    }
-
-    const float accel = 1, brake = 0, clutch = 0;
-    const int gear = -1, focus = 0, meta = 0;
-    float steer = getSteer(track_initial_pos, cs);
-
-    return CarControl(accel, brake, gear, steer, clutch, focus, meta);
-}
-
 void
 Stuck::setParameters(float ss, int mrd, int mst, int msst)
 {
@@ -74,7 +55,8 @@ Stuck::hasBeenStuckLongEnough() {
     return (elapsed_ticks >= maximum_number_of_ticks_stuck);
 }
 
-bool Stuck::isStuck(CarState &cs) {
+bool 
+Stuck::isStuck(CarState &cs) {
     return (seemsStuck(cs) && !justStartedRace(cs));
 }
 
@@ -121,12 +103,12 @@ Stuck::get_steer(CarState &cs) {
 int
 Stuck::get_gear(CarState &cs){
 
-    return 0;
+    return -1;
 }
 
 float
 Stuck::get_accel(CarState &cs){
-    return 0;
+    return 1;
 }
 
 float

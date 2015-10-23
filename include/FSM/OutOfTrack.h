@@ -81,18 +81,18 @@ private:
     * higher enough and 1 when the car has Xspeed < 0
     * /
     float getBrake(CarState &cs);
-    /** getAccel calculate the accel based on the Yspeed and negative_accel_percent
+    ** getAccel calculate the accel based on the Yspeed and negative_accel_percent
     * @param cs the driver's perception of the environment.
     * @return the accel value proportinal to Yspeed
     * /
     float getAccel(CarState &cs);
-    /** getGear calculate the accel based on the Xspeed and speed limits to each gear, that way
+    ** getGear calculate the accel based on the Xspeed and speed limits to each gear, that way
     * high speed need high gear. Please note that outoftrack does not use rpm to obtain gear.
     * @param cs the driver's perception of the environment.
     * @return the a gear value accordingthe car's Xspeed
     * /
     int getGear(CarState &cs);
-    /** getSteer calculate the steer based on the trackPos sensor, that allow to know which track
+    ** getSteer calculate the steer based on the trackPos sensor, that allow to know which track
     * border the car is, and angle that allow to know which side turn the steer.
     * @param cs the driver's perception of the environment.
     * @return 1 or -1 to Steer value

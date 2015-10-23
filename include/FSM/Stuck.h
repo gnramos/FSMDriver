@@ -50,8 +50,6 @@ public:
     /** Destructor. */
     ~Stuck();
 
-    CarControl drive(CarState &);
-
     /** Indicates if the controller is stuck.
      *
      * @param cs the driver's perception of the environment.
@@ -64,9 +62,6 @@ public:
     void setParameters(float ss, int mrd, int mst, int msst);
 
 private:
-    /** start_gear is the first gear
-    */
-    int start_gear = 1;
     /** stuck_speed is the value which bellow it a car may be stuck
     */
     float stuck_speed;

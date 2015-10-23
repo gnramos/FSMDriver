@@ -140,8 +140,8 @@ private:
     *@param cs a data structure cointaining information from the car's sensors.
     *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed
     */
-    float getBrake(CarState cs);
-    /** Find the highest value of the 19 track sensors.
+    /**float getBrake(CarState cs);
+     Find the highest value of the 19 track sensors.
     *@param cs a data structure cointaining information from the car's sensors.
     *@return the index of the track sensor with highest value
     */
