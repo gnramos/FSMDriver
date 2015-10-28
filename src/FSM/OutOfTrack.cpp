@@ -26,32 +26,8 @@ OutOfTrack::setParameters(float _ms, float _nap, int _vg4, int _vg3, int _vg2, f
 }
 
 float
-OutOfTrack::get_brake(CarState &cs) {
-    if(cs.getSpeedX() < 0) return 1;
-    if(abs(cs.getSpeedY()) > max_skidding) return 0.1;
-
-    return 0;
-}
-
-float
-OutOfTrack::get_accel(CarState &cs) {
-    return(1-abs(cs.getSpeedY())*negative_accel_percent); /* @todo can be negative, need some fix */
-}
-
-int
-OutOfTrack::get_gear(CarState &cs) {
-    if(cs.getSpeedX() > velocity_gear_4) return cs.getGear(); //out of track the gear control based on velocity seems better than the one based on rpm
-                                                            /* @todo need reverse behavior */
-    if(cs.getSpeedX() > velocity_gear_3) return 3;
-    if(cs.getSpeedX() > velocity_gear_2) return 2;
-
-    return 1;
-}
-
-float
 OutOfTrack::get_steer(CarState &cs) {
-	float angle = cs.getAngle();
-    /** Aim to go back to the track with a range of angles, between MIN_RETURN_ANGLE and MAX_RETURN_ANGLE with relation to the axis of track*/
+    float angle = cs.getAngle();
     if(cs.getTrackPos() > 0){
         if(angle > max_return_angle) return 1;
         if(angle < min_return_angle) return -1;
@@ -63,16 +39,36 @@ OutOfTrack::get_steer(CarState &cs) {
     return 0;
 }
 
-OutOfTrack::~OutOfTrack() {
-    /* Nothing. */
+int
+OutOfTrack::get_gear(CarState &cs) {
+    if(cs.getSpeedX() > velocity_gear_4) return cs.getGear(); 
+                                                            /* @todo need reverse behavior */
+    if(cs.getSpeedX() > velocity_gear_3) return 3;
+    if(cs.getSpeedX() > velocity_gear_2) return 2;
+
+    return 1;
 }
 
+float
+OutOfTrack::get_accel(CarState &cs) {
+    return(1-abs(cs.getSpeedY())*negative_accel_percent); /* @todo can be negative, need some fix */
+}
 
+float
+OutOfTrack::get_brake(CarState &cs) {
+    if(cs.getSpeedX() < 0) return 1;
+    if(abs(cs.getSpeedY()) > max_skidding) return 0.1;
 
-/**************************************************************************
- * Modularização*/
+    return 0;
+}
 
 float
 OutOfTrack::get_clutch(CarState &cs){
     return 0;
 }
+
+
+OutOfTrack::~OutOfTrack() {
+    /* Nothing. */
+}
+

@@ -43,10 +43,31 @@ public:
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
 
+    /** get_steer obtain steer value checking first if the driven is at the right direction, if not the steer is
+    *calculated using angle value, case not using the distance(highest track sensor value)
+    *@param angle a data from the car's sensor angle.
+    *@return a normalized steer value
+    */
     virtual float get_steer(CarState &cs);
+    /** get_gear It receive gear from cs, based on gear and rpm it change gear
+    * @param cs the driver's perception of the environment.
+    * @return the a gear value accordingthe car's rpm
+    */
     virtual int get_gear(CarState &cs);
+    /** get_accel calculates the accel based on the targetSpeed factor
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 0 if the current speedX is higher the target speed and 1 if it lower the target speed
+    */
     virtual float get_accel(CarState &cs);
+    /** get_brake calculates the brake based on the targetSpeed factor
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed
+    */
     virtual float get_brake(CarState &cs);
+    /** get_clutch calculates the clutch
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 0 
+    */
     virtual float get_clutch(CarState &cs);
 
     void setParameters(int, int, int, int, int, float, float);
@@ -121,12 +142,6 @@ private:
     * @return true if the driver must increase gear and false if it must not
     */
     bool shouldIncreaseGear(int current_gear, int rpm);
-    /** It receive gear from cs, base on gear and rpm it change gear
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return the accel based on cs values
-    *
-    float getAccel(CarState &cs);
-    */
     /** Change the target_speed based on base_speed, speed_factor and distance
     *@param cs a data structure cointaining information from the car's sensors.
     */
@@ -136,12 +151,7 @@ private:
     * @param cs a data structure cointaining information from the car's sensors.
     */
     bool isFacingWrongWay(CarState &cs);
-    /** Compare the XSpeed with target speed to obtain the brake
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed
-    */
-    /**float getBrake(CarState cs);
-     Find the highest value of the 19 track sensors.
+    /** Find the highest value of the 19 track sensors.
     *@param cs a data structure cointaining information from the car's sensors.
     *@return the index of the track sensor with highest value
     */
@@ -151,13 +161,6 @@ private:
     *@return a normalized value
     */
     float normalizeSteer(float angle);
-    /** getSteer obtain steer value checking first if the driven is at the right direction, if not the steer is
-    *calculated using angle value, case not using the distance(highest track sensor value)
-    *@param angle a data from the car's sensor angle.
-    *@return a normalized steer value
-    *
-    float getSteer(CarState &cs);
-    */
 };
 
 #endif // FSMDRIVER_STATE_INSIDETRACK_H

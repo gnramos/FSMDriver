@@ -40,10 +40,31 @@ public:
                int _vg3 = 70, int _vg2 = 40, float _maxra = 0.7,
                float _minra = 0.5);
 
+    /** get_steer aim to go back to the track with a range of angles, 
+    *between MIN_RETURN_ANGLE and MAX_RETURN_ANGLE with relation to the axis of track
+    *@param angle a data from the car's sensor angle.
+    *@return full steer turn to go back to track
+    */
     virtual float get_steer(CarState &cs);
+    /** get_gear It receives the velocity from cs and change the gear based on it
+    * @param cs the driver's perception of the environment.
+    * @return the a gear value accordingthe car's velocity
+    */
     virtual int get_gear(CarState &cs);
+    /** get_accel calculates the accel based on the speed from cs
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 1 minus the absolute value of the speed times a negative percent factor
+    */
     virtual float get_accel(CarState &cs);
+    /** get_brake calculates the brake based on the speed from cs and the wheels skidding
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 1 if the controller's speed is negative and 0.1 if it is skidding
+    */
     virtual float get_brake(CarState &cs);
+    /** get_clutch calculates the clutch
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 0 
+    */
     virtual float get_clutch(CarState &cs);
 
     /** Auxiliar function to set class parameters

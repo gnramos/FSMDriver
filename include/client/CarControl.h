@@ -96,19 +96,6 @@ public:
         static int META_RESTART;
 
 
-        /*Modularização
-        float get_steer(CarState &cs);
-
-        int get_gear(CarState &cs);
-
-        float get_accel(CarState &cs);
-
-        float get_brake(CarState &cs);
-
-        float get_clutch(CarState &cs);
-
-        */
-
 };
 
 #endif /*CARCONTROL_H_*/
