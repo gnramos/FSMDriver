@@ -8,8 +8,8 @@
  * version.
  */
 
-#ifndef UNB_FSMDRIVER_STATE_INSIDE_TRACK_H
-#define UNB_FSMDRIVER_STATE_INSIDE_TRACK_H
+#ifndef UNB_FSMDRIVER_STATE_INSIDE_TRACKA_H
+#define UNB_FSMDRIVER_STATE_INSIDE_TRACKA_H
 
 #include <cmath>
 #include "DrivingState.h"
@@ -33,13 +33,13 @@
  * @param speed_factor lowest speed allowed.
  *
  */
-class InsideTrack : public DrivingState {
+class InsideTrackA : public DrivingState {
 public:
     /* Constructor
      *
      * Call setParameters
      */
-    InsideTrack(int _sg = 1, int _lgl = 4, int _lrpm = 1500,
+    InsideTrackA(int _sg = 1, int _lgl = 4, int _lrpm = 1500,
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
 
@@ -72,7 +72,7 @@ public:
 
     void setParameters(int, int, int, int, int, float, float);
     //! Empty destructor
-    ~InsideTrack();
+    ~InsideTrackA();
 
 private:
     /**start_gear is the gear used at the begining of the race
@@ -163,4 +163,4 @@ private:
     float normalizeSteer(float angle);
 };
 
-#endif // FSMDRIVER_STATE_INSIDETRACK_H
+#endif // FSMDRIVER_STATE_INSIDETRACKA_H
