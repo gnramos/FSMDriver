@@ -20,7 +20,17 @@ make
 make DRIVER=FSMDriver5
 ```
 
-This creates the default driver executable (```FSMDriver3```) and also ```FSMDriver5```. To test it (assuming you started a properly configured race), just run:
+This creates the default driver executable (```FSMDriver3```) and also ```FSMDriver5```.
+
+You can also create a driver that extends from another with:
+
+```bash
+make DRIVER=FSMDriverABS DRIVER_SUP=FSMDriver3
+```
+
+This creates the FSMDriverABS, which extends from FSMDriver3.
+
+To test it (assuming you started a properly configured race), just run:
 
 ```bash
 ./bin/FSMDriver3
