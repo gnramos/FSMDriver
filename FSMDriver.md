@@ -1,7 +1,7 @@
 FSMDriver
 =========
 
-A driver implementation using a Finite State Machine implementation to control its actions.
+A driver implementation using a Finite State Machine implemented with modules to control its actions.
 
 Main ideia
 --------------------
@@ -14,6 +14,22 @@ Finite State Machine
 --------------------
 
 A finite state machine can be described as device (or model of a device) that has a finite number of states it can be in at any given time, though it can only be in one state at any moment, and can operate on input to either make transitions from one state to another or to cause an output or action to take place.
+
+The modular architecture
+--------------------
+In order to facilitate de developing stage of the controller, 5 modules were created:
+
+### get_steer ###
+
+### get_gear ###
+
+### get_accel ###
+
+### get_brake ###
+
+### get_clutch ###
+
+ Witch each one had to be implemented in each module with it's own behaviour. Each one returns a value for the respective actuator, and then DrivingState returns a CarControl with these actuatros values.
 
 States
 ------

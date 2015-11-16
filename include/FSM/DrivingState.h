@@ -43,11 +43,20 @@ public:
  * Modularização*/
 
 protected:
-    /*Declarar os métodos e implementar  no DrivingState.cpp*/
+    /** Virtual method for determining the steering value
+    */
     virtual float get_steer(CarState &cs) = 0;
-    virtual int get_gear(CarState &cs) = 0;     
+    /** Virtual method for determining the gear value
+    */
+    virtual int get_gear(CarState &cs) = 0;   
+    /** Virtual method for determining the acceleration value
+    */  
     virtual float get_accel(CarState &cs) = 0;
+    /** Virtual method for determining the brake value
+    */
     virtual float get_brake(CarState &cs) = 0;
+    /** Virtual method for determining the clutch value
+    */
     virtual float get_clutch(CarState &cs) = 0;
 
     
