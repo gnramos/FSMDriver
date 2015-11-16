@@ -88,7 +88,7 @@ $(OBJ_DIR)/%.o: $(FSM_SRC_DIR)/%.cpp
 ifneq ($(DRIVER_SUP),)
 
 $(DRIVER_SUP_OBJ)/%.o: $(DRIVER_SUP_SRC_DIR)/%.cpp
-	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(DRIVER_SUP_INC_DIR) -I$(FSM_INC_DIR) -I$(CLIENT_INC_DIR)
+	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(DRIVER_SUP_INC_DIR) #-I$(FSM_INC_DIR) -I$(CLIENT_INC_DIR)
 
 endif
 

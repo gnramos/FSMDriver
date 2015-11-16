@@ -12,7 +12,7 @@
 #include "FSMDriver.h"
 
 DrivingState::DrivingState() {
-    /* Nothing. */
+    ticks_in_state = 0;
 }
 
 DrivingState::~DrivingState() {
@@ -41,8 +41,19 @@ DrivingState::drive(CarState &cs) {
     float brake = get_brake(cs);
     float clutch = get_clutch(cs);
 
+    add_ticks_in_state();
+
     return CarControl(accel, brake, gear, steer, clutch);
 }
 
+int 
+DrivingState::get_ticks_in_state(){
+    return ticks_in_state;
+}
+
+void
+DrivingState::add_ticks_in_state(){
+    ticks_in_state += 1;
+}
 
 

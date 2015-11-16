@@ -38,26 +38,23 @@ public:
     virtual void exit();
 
 
+    int get_ticks_in_state();
+
+    void add_ticks_in_state();
+
 
 /**************************************************************************
  * Modularização*/
 
 protected:
-    /** Virtual method for determining the steering value
-    */
+    /*Declarar os métodos e implementar  no DrivingState.cpp*/
     virtual float get_steer(CarState &cs) = 0;
-    /** Virtual method for determining the gear value
-    */
-    virtual int get_gear(CarState &cs) = 0;   
-    /** Virtual method for determining the acceleration value
-    */  
+    virtual int get_gear(CarState &cs) = 0;     
     virtual float get_accel(CarState &cs) = 0;
-    /** Virtual method for determining the brake value
-    */
     virtual float get_brake(CarState &cs) = 0;
-    /** Virtual method for determining the clutch value
-    */
     virtual float get_clutch(CarState &cs) = 0;
+
+    int ticks_in_state;
 
     
 };

@@ -33,11 +33,11 @@
 */
 
 class FSMDriver3 : public FSMDriver {
-private:
+protected:
     // States.
-    InsideTrack inside_track;
-    OutOfTrack out_of_track;
-    Stuck stuck;
+    InsideTrack *inside_track;
+    OutOfTrack *out_of_track;
+    Stuck *stuck;
 
 public:
     /** Called when the driver finishes the race. */
@@ -77,6 +77,13 @@ public:
      * @details Set all states with the parameters found with Genetic Algorithm, for dirt tracks.
      */
     void setDIRT();
+
+
+    /**
+     * @Set race parameters
+     * @details Set race parameters matching the track type. 
+     */
+    void setTrackType();
 };
 
 #endif // FSMDriver3_H

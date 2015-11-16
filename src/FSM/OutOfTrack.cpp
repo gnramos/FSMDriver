@@ -10,7 +10,7 @@
 
 #include "OutOfTrack.h"
 
-OutOfTrack::OutOfTrack(float _ms, float _nap, int _vg4, int _vg3, int _vg2, float _maxra, float _minra) {
+OutOfTrack::OutOfTrack(float _ms, float _nap, int _vg4, int _vg3, int _vg2, float _maxra, float _minra) : DrivingState(){
     setParameters(_ms, _nap, _vg4, _vg3, _vg2, _maxra, _minra);
 }
 

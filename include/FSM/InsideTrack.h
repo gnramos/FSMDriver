@@ -43,28 +43,28 @@ public:
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
 
-    /** Obtains the steering value by checking first if the driven is at the right direction, if not the steer is
+    /** get_steer obtain steer value checking first if the driven is at the right direction, if not the steer is
     *calculated using angle value, case not using the distance(highest track sensor value)
     *@param angle a data from the car's sensor angle.
     *@return a normalized steer value
     */
     virtual float get_steer(CarState &cs);
-    /** It receives the gear from cs, based on it and rpm, it changes the gear
+    /** get_gear It receive gear from cs, based on gear and rpm it change gear
     * @param cs the driver's perception of the environment.
     * @return the a gear value accordingthe car's rpm
     */
     virtual int get_gear(CarState &cs);
-    /** Calculates the acceleratin based on the targetSpeed factor 
+    /** get_accel calculates the accel based on the targetSpeed factor
     *@param cs a data structure cointaining information from the car's sensors.
     *@return 0 if the current speedX is higher the target speed and 1 if it lower the target speed
     */
     virtual float get_accel(CarState &cs);
-    /** Calculates the brake based on the targetSpeed factor
+    /** get_brake calculates the brake based on the targetSpeed factor
     *@param cs a data structure cointaining information from the car's sensors.
     *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed
     */
     virtual float get_brake(CarState &cs);
-    /** Calculates the clutch
+    /** get_clutch calculates the clutch
     *@param cs a data structure cointaining information from the car's sensors.
     *@return 0 
     */
