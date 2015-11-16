@@ -15,38 +15,32 @@
 #include "DrivingState.h"
 
 /**
- * Handles the driving when the car is within track limits, which mean that the the
- * sensors track wil return values > 0 inside the track. This state is responsible
- * for any event that occur inside the track including curves and straightline tracks.
- */
-/**
- * @brief InsideTrack state
- * @details  Handles the driving when the car is within track limits, which mean that the the
- *           sensors track wil return values > 0 inside the track. This state is responsible
- *           for any event that occur inside the track including curves and straightline tracks.
+ * Handles the driving when the car is within track limits.
  *
- * @param low_gear_limit threshlod to bound low gears.
- * @param low_rpm threshlod of rpm to delimit the change of low gears.
- * @param average_rpm threshlod to decrease high gears.
- * @param high_rpm threshlod to increase high gears.
- * @param base_speed proportionality between highest value read by range finders and TARGET SPEED.
- * @param speed_factor lowest speed allowed.
- *
+ * This means that the sensors track wil return values > 0 inside the track. This
+ * state is responsible for any event that occurs inside the track including
+ * curves and straightline tracks.
  */
 class InsideTrackA : public DrivingState {
 public:
-    /* Constructor
+    /** Constructor.
      *
-     * Call setParameters
+     * @param _sg The gear to be used at the begining of the race.
+     * @param _lgl The rpm threshold value for changing low gears.
+     *
+     * @see setParameters(int, int, int, int, int, float, float);
      */
     InsideTrackA(int _sg = 1, int _lgl = 4, int _lrpm = 1500,
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
 
-    /** Obtains the steering value by checking first if the driven is at the right direction, if not the steer is
-    *calculated using angle value, case not using the distance(highest track sensor value)
-    *@param angle a data from the car's sensor angle.
-    *@return a normalized steer value
+    /** Defines a steering angle according to the car's perception of the environment.
+    * Obtains the steering value by checking first if the driven is at the right direction, if not the steer is
+    *calculated using angle value, case not using the distance (highest track sensor value)
+    *
+    *@param cs A CarState that describes the car's perception of the environment.
+    *
+    *@return A value for steering (between -ANGULO e ANGULO)
     */
     virtual float get_steer(CarState &cs);
     /** It receives the gear from cs, based on it and rpm, it changes the gear
@@ -54,7 +48,7 @@ public:
     * @return the a gear value accordingthe car's rpm
     */
     virtual int get_gear(CarState &cs);
-    /** Calculates the acceleratin based on the targetSpeed factor 
+    /** Calculates the acceleratin based on the targetSpeed factor
     *@param cs a data structure cointaining information from the car's sensors.
     *@return 0 if the current speedX is higher the target speed and 1 if it lower the target speed
     */
@@ -66,28 +60,29 @@ public:
     virtual float get_brake(CarState &cs);
     /** Calculates the clutch
     *@param cs a data structure cointaining information from the car's sensors.
-    *@return 0 
+    *@return 0
     */
     virtual float get_clutch(CarState &cs);
 
+    /** Faz alguma coisa * */
     void setParameters(int, int, int, int, int, float, float);
     //! Empty destructor
     ~InsideTrackA();
 
 private:
-    /**start_gear is the gear used at the begining of the race
-    */
+    /** The gear used at the beginning of the race */
     int start_gear;
-    /**low_gear_limit is the gear value that determine if the driver must decreace or increace gear based on gear
+
+    /** The gear value that determine if the driver must decrease or increase gear based on gear
     */
     int low_gear_limit;
-    /**low_rpm is the rpm value that determine if the driver must decreace or increace gear based on the gear
+    /**low_rpm is the rpm value that determine if the driver must decrease or increase gear based on the gear
     */
     int low_rpm;
-    /**average_rpm is the rpm value that determine if the driver must decreace or increace gear based on the rpm
+    /**average_rpm is the rpm value that determine if the driver must decrease or increase gear based on the rpm
     */
     int average_rpm;
-    /**high_rpm is the rpm value that determine if the driver must decreace or increace gear based on the rpm
+    /**high_rpm is the rpm value that determine if the driver must decrease or increase gear based on the rpm
     */
     int high_rpm;
     /**base_speed is a parameter to determine if the driver's speed

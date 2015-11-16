@@ -19,7 +19,7 @@ The modular architecture
 --------------------
 In order to facilitate de developing stage of the controller, 5 modules were created:
 
-### get_steer ###
+### DrivingState::get_steer ###
 
 ### get_gear ###
 
@@ -50,7 +50,7 @@ Given that the driver is inside the track it will aim to the higher reading rang
 
 ### OutOfTrack ###
 
-Given that driver is outside the boundaries of the track it will try to get back to the track with an appropriate return angle. 
+Given that driver is outside the boundaries of the track it will try to get back to the track with an appropriate return angle.
 
 ### StraightLine ###
 
