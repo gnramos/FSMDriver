@@ -124,24 +124,26 @@ InsideTrackA::get_gear(CarState &cs){
 }
 
 /*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
+
+
+
+/** Accelerate if the current speed is under the target_speed.
+Acceleration is proportional to the perceived open space in
+front of the car (considering the 5 front most sensors). */
 float
 InsideTrackA::get_accel(CarState &cs){
     setTargetSpeed(cs);
     int Front, max10, max20;
 
     Front = cs.getTrack(10);
-    if(cs.getTrack(9) > cs.getTrack(11))
-        max10 = cs.getTrack(9);
-    else 
-        max10 = cs.getTrack(11);
-    if(cs.getTrack(8) > cs.getTrack(12))
-        max20 = cs.getTrack(8);
-    else 
-        max20 = cs.getTrack(12);
+    max10 = max(cs.getTrack(9), cs.getTrack(11));
+    max20 = max(cs.getTrack(8), cs.getTrack(12));
+
+    float accel = (cs.getSpeedX() > target_speed ? 0 : (Front+max10+max20)/(3*100));
 
     //printf("%d, %d, %d\n, accel: %.2f", Front, max10, max20, (Front+max10+max20)/(3*100));
 
-    return cs.getSpeedX() > target_speed ? 0 : (Front+max10+max20)/(3*100);
+    return accel ;
 }
 
 float
@@ -149,6 +151,7 @@ InsideTrackA::get_brake(CarState &cs){
     return cs.getSpeedX() > target_speed ? 0.3 : 0;
 }
 
+/** Always returns 0. */
 float
 InsideTrackA::get_clutch(CarState &cs){
     return 0;

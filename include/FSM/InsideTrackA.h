@@ -52,10 +52,6 @@ public:
     * @return the a gear value accordingthe car's rpm */
     virtual int get_gear(CarState &cs);
 
-    /** Defines the acceleration intensity according to the car's perception of the environment.
-    * Calculates the acceleratin based on the targetSpeed factor
-    *@param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
-    *@return 0 if the current speedX is higher the target speed and 1 if it lower the target speed*/
     virtual float get_accel(CarState &cs);
 
     /** Defines the brake intensity according to the car's perception of the environment.
@@ -64,10 +60,6 @@ public:
     *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed*/
     virtual float get_brake(CarState &cs);
 
-    /** Defines the clutch value according to the car's perception of the environment.
-    * Calculates the clutch
-    *@param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
-    *@return 0 */
     virtual float get_clutch(CarState &cs);
 
     /** Faz alguma coisa * */

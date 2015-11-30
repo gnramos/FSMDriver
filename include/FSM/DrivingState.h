@@ -1,11 +1,11 @@
 /**  @file: DrivingState.h
  *
  * https://github.com/bruno147/fsmdriver
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
- * version. 
+ * version.
  */
 
 #ifndef UNB_FSMDRIVER_DRIVING_STATE_H
@@ -48,9 +48,12 @@ protected:
     virtual float get_steer(CarState &cs) = 0;
     /** Virtual method for determining the gear value
     */
-    virtual int get_gear(CarState &cs) = 0;   
-    /** Virtual method for determining the acceleration value
-    */  
+    virtual int get_gear(CarState &cs) = 0;
+
+    /** Defines the acceleration intensity according to the car's perception of the environment.
+     *
+     * @param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
+     * @return The acceleration intensity. */
     virtual float get_accel(CarState &cs) = 0;
     /** Virtual method for determining the brake value
     */
@@ -59,7 +62,7 @@ protected:
     */
     virtual float get_clutch(CarState &cs) = 0;
 
-    
+
 };
 
 #endif // UNB_FSMDRIVER_DRIVING_STATE_H
