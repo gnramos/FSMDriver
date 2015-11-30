@@ -21,13 +21,13 @@ In order to facilitate de developing stage of the controller, 5 modules were cre
 
 ### DrivingState::get_steer ###
 
-### get_gear ###
+### DrivingState::get_gear ###
 
-### get_accel ###
+### DrivingState::get_accel ###
 
-### get_brake ###
+### DrivingState::get_brake ###
 
-### get_clutch ###
+### DrivingState::get_clutch ###
 
  Witch each one had to be implemented in each module with it's own behaviour. Each one returns a value for the respective actuator, and then DrivingState returns a CarControl with these actuatros values.
 
