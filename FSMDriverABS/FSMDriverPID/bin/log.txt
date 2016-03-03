@@ -1,0 +1,3 @@
+Inside track: 5490 ticks
+Outside track: 784 ticks
+Stuck: 186 ticks
