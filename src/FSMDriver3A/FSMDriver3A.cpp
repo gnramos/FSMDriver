@@ -144,8 +144,8 @@ FSMDriver3A::transition(CarState &cs) {
             state = &inside_track;
         else {
             if(cs.getSpeedX() > 85) {
-                memory.push_back(Knowledge(abs(cs.getSpeedX())*0.9, cs.getDistFromStart()));
-                sort(memory.begin(), memory.end(), Knowledge::aux_sort);
+                /*memory.push_back(Knowledge(abs(cs.getSpeedX())*0.9, cs.getDistFromStart()));
+                sort(memory.begin(), memory.end(), Knowledge::aux_sort);*/
             }
             state = &out_of_track;
         }

@@ -22,7 +22,7 @@
 #include "Knowledge.h"
 
 /** @class FSMDriver3A
-*   @brief The driver itself, with improved acceleration.
+*   @brief The driver itself with improved acceleration performance.
 *
 *   This class defines the driver based on a FSM.
 *
@@ -52,30 +52,31 @@ public:
      * according to a normal distribution, i.e., the sensors are more
      * densely distributed in front of car and less on the sides.
      * 
-     * @param angles values in degrees of the range finders.
-     */
+     * @param angles values in degrees of the range finders.*/
     virtual void init(float *angles);
+
     /** Empty constructor. */
     FSMDriver3A();
+
     /** Empty destructor */
     virtual ~FSMDriver3A();
+
     /** Transitions between states. */
     /**
     *   This method decides whenever the current state does not fit with the car status and needs to be changed.The transition choose the most fitted state at the moment of the race.
     *   The transition check if the car is stuck by the it's speed, if it is lower than certain value for long enough it is stuck, if it is not, the function check the car is inside or
     *   out side the track using tracks sensors than choosing the appropriate state.
-    *	@param cs a data structure cointaining information from the car's sensors.
-    */
+    *	@param cs a data structure cointaining information from the car's sensors.*/
     void transition(CarState &cs);
+
     /**
      * @brief Set Road Parameters.
-     * @details Set all states with the parameters found with Genetic Algorithm, for road tracks.
-     */
+     * @details Set all states with the parameters found with Genetic Algorithm, for road tracks. */
     void setROAD();
+
     /**
      * @brief Set Dirt Parameters.
-     * @details Set all states with the parameters found with Genetic Algorithm, for dirt tracks.
-     */
+     * @details Set all states with the parameters found with Genetic Algorithm, for dirt tracks. */
     void setDIRT();
 };
 

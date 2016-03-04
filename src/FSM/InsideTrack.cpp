@@ -104,7 +104,7 @@ InsideTrack::~InsideTrack() {
 
 
 /**************************************************************************
- * Modularização*/
+ * Modularization*/
 float
 InsideTrack::get_steer(CarState &cs) {
     return isFacingWrongWay(cs) ? cs.getAngle() : findFarthestDirection(cs);
@@ -123,7 +123,6 @@ InsideTrack::get_gear(CarState &cs){
     return gear;
 }
 
-/*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
 float
 InsideTrack::get_accel(CarState &cs){
     setTargetSpeed(cs);

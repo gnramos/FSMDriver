@@ -20,105 +20,96 @@
  * @details Handles the driving when the car is outside track limits. Since the outside the track the track's type change, like dirt road,
  * the driver losses performance that state manage to take the drive out of the track.
  *
- * @param max_skidding defines the threshold to start to break to avoid skidding.
- * @param negative_accel_percent dictate how much to release the acceleration pedal to avoid to skidding,
- *                               its defined with the axis speed of car.
- * @param velocity_gear_4 threshold to change the gear to 4.
- * @param velocity_gear_3 threshold to change the gear to 3.
- * @param velocity_gear_2 threshold to change the gear to 2.
- * @param max_return_angle upper boundary to angle of return to track.
- * @param min_return_angle lower boundary to angle of return to track.
+ * @param max_skidding Defines the threshold to start to break to avoid skidding.
+ * @param negative_accel_percent Dictate how much to release the acceleration pedal to avoid to skidding,
+ *                               it is defined with the axis speed of car.
+ * @param velocity_gear_4 Threshold to change the gear to 4.
+ * @param velocity_gear_3 Threshold to change the gear to 3.
+ * @param velocity_gear_2 Threshold to change the gear to 2.
+ * @param max_return_angle Upper boundary to angle of return to track.
+ * @param min_return_angle Lower boundary to angle of return to track.
  */
 class OutOfTrack : public DrivingState {
 public:
     /** Constructor.
      *
      * Call setParameters
-     * @param _ms (max_skidding), _nap (negative_accel_percent), _vg4 (velocity_gear_4), _vg3 (velocity_gear_3), _vg2 (velocity_gear_2), maxra (max_return_angle), minra (min_return_angle), description    * can be found bellow
+     * @param _ms (max_skidding)
+     * @param _nap (negative_accel_percent)
+     * @param _vg4 (velocity_gear_4)
+     * @param _vg3 (velocity_gear_3)
+     * @param _vg2 (velocity_gear_2)
+     * @param maxra (max_return_angle)
+     * @param minra (min_return_angle)
+     *
+     * Description    
+     * can be found bellow.
+     *
+     * @see setParameters(float, float, int, int, int, float, float);
      */
     OutOfTrack(float _ms = 3, float _nap = 0.1, int _vg4 = 90,
                int _vg3 = 70, int _vg2 = 40, float _maxra = 0.7,
                float _minra = 0.5);
 
-    /** Aims to go back to the track with a range of angles, 
-    *between MIN_RETURN_ANGLE and MAX_RETURN_ANGLE with relation to the axis of track
-    *@param angle a data from the car's sensor angle.
-    *@return full steer turn to go back to track
-    */
+    /**************************************************************************/
+
+    /** Obtains the steering value based on the trackPos sensor from cs, that allow to know which track 
+    * border the car is, and angle sensor that allow to know which side to turn the steer.
+    * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return -1 or 1 to Steer value, full right and full left respectively, according to the track border. */
     virtual float get_steer(CarState &cs);
-    /** Receives the velocity from cs and change the gear based on it
-    * @param cs the driver's perception of the environment.
-    * @return the a gear value accordingthe car's velocity
-    */
+
+    /** It receives cs and calculates the gear based on the current speed and the speed limits to each gear, that way
+    * high speed need high gear. Please note that this state does not use rpm to obtain gear.
+    * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return The gear value accordingthe car's current speed.*/
     virtual int get_gear(CarState &cs);
-    /** Calculates the acceleration value based on the speed from cs
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return the correct acceleration value according to the car's speed
-    */
+
+    /** It calculates the acceleration based on the speedY from cs and the proportinal factor negative_accel_percent.
+    * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return Virtual gas pedal intensity proportional to the speedY.*/
     virtual float get_accel(CarState &cs);
-    /** Calculates the brake based on the speed from cs and the wheels skidding
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return 1 if the controller's speed is negative and 0.1 if it is skidding
-    */
+
+    /** It calculates the brake based on the speedX, speedY from cs and max_skidding.
+    * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return 0.1 if the car's speedY is higher than max_skidding,
+    * 1 when the car's speedX is negative, and 0 for other cases.*/
     virtual float get_brake(CarState &cs);
-    /** Calculates the clutch, returning 0
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return 0 
-    */
+
+    /** It recives the cs and calculates the clutch, always returning 0.
+    * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return Always 0. */
     virtual float get_clutch(CarState &cs);
 
-    /** Auxiliar function to set class parameters
-     *
-     */
+    /**************************************************************************/
+
+    /** Auxiliar funcion to set class attributes*/
     void setParameters(float, float, int, int, int, float, float);
     //! Empty destructor
     ~OutOfTrack();
 
 private:
-    /** The car's skidding is measured by Yspeed, max_skidding is a constant to indicated how much the drive must brake
-    */
+    /** A constant to indicated how much the drive must brake, measured by speedY.*/
     float max_skidding;
-    /** The negative_accel_percent is a proportinal factor to calculate accel
-    */
+
+    /** Proportinal factor to calculate acceleration.*/
     float negative_accel_percent;
-    /** velocity_gear_4 is a constant that determine a speed which above it the gear must remain the same
-    */
+
+    /** A constant that determines a speed which above it the gear must remain the same.*/
     int velocity_gear_4;
-    /** velocity_gear_3 is a constant that determine a speed which above it and bellow velocity_gear_3 the gear must be set 3
-    */
+
+    /** A constant that determines a speed which above it and bellow velocity_gear_3 the gear must be set 3.*/
     int velocity_gear_3;
-    /** velocity_gear_2 is a constant that determine a speed which bellow it must be set 1
-    */
+
+    /** A constant that determines a speed which bellow it must be set 1.*/
     int velocity_gear_2;
-    /** max_return_angle the a angle limit that turning steer to -1 or 1 depending the TrackPos sensor
-    */
+
+    /** The a angle limit that turning steer to -1 or 1 depending the TrackPos sensor.*/
     float max_return_angle;
-    /** min_return_angle the a angle limit that turning steer to -1 or 1 depending the TrackPos sensor
-    */
+
+    /** The a angle limit that turning steer to -1 or 1 depending the TrackPos sensor.*/
     float min_return_angle;
-    /** getBrake obtain the brake based on the Xspeed,Yspeed and max_skidding
-    * @param cs the driver's perception of the environment.
-    * @return 0 when the car' Xspeed and Yspeed is not high enough, 0.1 when the car has Yspeed
-    * higher enough and 1 when the car has Xspeed < 0
-    * /
-    float getBrake(CarState &cs);
-    ** getAccel calculate the accel based on the Yspeed and negative_accel_percent
-    * @param cs the driver's perception of the environment.
-    * @return the accel value proportinal to Yspeed
-    * /
-    float getAccel(CarState &cs);
-    ** getGear calculate the accel based on the Xspeed and speed limits to each gear, that way
-    * high speed need high gear. Please note that outoftrack does not use rpm to obtain gear.
-    * @param cs the driver's perception of the environment.
-    * @return the a gear value accordingthe car's Xspeed
-    * /
-    int getGear(CarState &cs);
-    ** getSteer calculate the steer based on the trackPos sensor, that allow to know which track
-    * border the car is, and angle that allow to know which side turn the steer.
-    * @param cs the driver's perception of the environment.
-    * @return 1 or -1 to Steer value
-    * /
-    float getSteer(CarState &cs); */
+    
 };
 
 #endif // UNB_FSMDRIVER_STATE_OUT_OF_TRACK_H

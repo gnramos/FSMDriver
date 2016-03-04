@@ -14,24 +14,37 @@
 #include <cmath>
 #include "DrivingState.h"
 
-/**
- * Handles the driving when the car is within track limits.
+ /**
+ * @brief InsideTrackA state with acceleration modifications
+ * @details  Handles the driving when the car is within track limits, which mean that the the
+ *           sensors track wil return values > 0 inside the track. This state is responsible
+ *           for any event that occur inside the track including curves and straightline tracks.
+ *           It is called InsideTrackA because of a performance uptade on the Acceleration
+ *           module, generating FSM3A a driver smoother than FSM3.
  *
- * This means that the sensors track will return values > 0 inside the track. This
- * state is responsible for any event that occurs inside the track including
- * curves and straightline tracks.
+ * @param start_gear the gear used at the begining of the race
+ * @param low_gear_limit Threshlod to bound low gears.
+ * @param low_rpm Threshlod of rpm to delimit the change of low gears.
+ * @param average_rpm Threshlod to decrease high gears.
+ * @param high_rpm Threshlod to increase high gears.
+ * @param base_speed Proportionality between highest value read by range finders and TARGET SPEED.
+ * @param speed_factor Lowest speed allowed.
+ *
  */
 class InsideTrackA : public DrivingState {
 public:
     /** Constructor.
      *
-     * @param _sg The gear to be used at the begining of the race.
-     * @param _lgl The rpm threshold value for changing low gears.
-     * @param _lrpm The low rpm value that determine if the driver must change the gear.
-     * @param _arpm The average rpm value that determine if the driver must change the gear.
-     * @param _hrpm The high rpm value that determine if the driver must change the gear.
-     * @param _bs A base speed factor for the driver.
-     * @param _sf A proportional parameter to determine driver's speed
+     * @param _sg (start_gear).
+     * @param _lgl (low_gear_limit).
+     * @param _lrpm (low_rpm).
+     * @param _arpm (average_rpm).
+     * @param _hrpm (high_rpm).
+     * @param _bs (base_speed).
+     * @param _sf (speed_factor).
+     *
+     * Description    
+     * can be found bellow.
      *
      * @see setParameters(int, int, int, int, int, float, float);
      */
@@ -39,120 +52,131 @@ public:
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
 
-    /** Defines a steering angle according to the car's perception of the environment.
-    * Obtains the steering value by checking first if the driven is at the right direction, if not the steer is
-    *calculated using angle value, case not using the distance (highest track sensor value)
-    *@param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
-    *@return A value for steering (between -ANGULO e ANGULO)*/
+    /**************************************************************************
+    * Modularization*/
+
+    /** Obtains the steering value by checking first if the driven is at the right direction, if not the steer is
+    *calculated using angle value from cs, case not using the distance (highest track sensor value).
+    *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    *@return A normalized steer value.*/
     virtual float get_steer(CarState &cs);
 
-    /** Defines the gear value according to the car's perception of the environment.
-    * It receives the gear from cs, based on it and rpm, it changes the gear
-    * @param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
-    * @return the a gear value accordingthe car's rpm */
+    /** It receives the gear from cs, based on it and rpm it decreases or increases the gear.
+    *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    * @return The gear value accordingthe car's rpm.*/
     virtual int get_gear(CarState &cs);
 
+    /** It sets the target_speed based on cs, if the current speed is lower than the target_speed, 
+    * it accelerates proportional to the perceived open space in front of the car, considering the 
+    * average of the 5 front most track sensors.
+    *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    *@return The average of the 5 front most track sensors.*/
     virtual float get_accel(CarState &cs);
 
-    /** Defines the brake intensity according to the car's perception of the environment.
-    * Calculates the brake based on the targetSpeed factor
-    *@param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
-    *@return 0 if the current speedX is lower the target speed and 0.3 if it higher the target speed*/
+    /** It sets the target_speed based on cs, and decides if should applies 0.3 break intesity or no break.
+    *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    *@return 0.3 if the current speed is higher than the target_speed and 1 if it is lower than the target_speed.*/
     virtual float get_brake(CarState &cs);
 
+    /** It recives the cs and calculates the clutch, always returning 0.
+    *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
+    *@return Always 0. */
     virtual float get_clutch(CarState &cs);
 
-    /** Faz alguma coisa * */
+    /**************************************************************************/
+
+    /** Auxiliar funcion to set class attributes*/
     void setParameters(int, int, int, int, int, float, float);
     //! Empty destructor
     ~InsideTrackA();
 
 private:
-    /** The gear used at the beginning of the race */
+    /** Gear used at the begining of the race*/
     int start_gear;
 
-    /** The gear value that determine if the driver must decrease or increase gear based on gear*/
+    /** Gear value that determine if the driver must decreace or increace gear based on gear.*/
     int low_gear_limit;
 
-    /**low_rpm is the rpm value that determine if the driver must decrease or increase gear based on the gear*/
+    /** Engine rotation value that determine if the driver must decreace or increace gear based on the gear.*/
     int low_rpm;
 
-    /**average_rpm is the rpm value that determine if the driver must decrease or increase gear based on the rpm*/
+    /** Engine Rotation value that determine if the driver must decreace or increace gear based on the rpm.*/
     int average_rpm;
 
-    /**high_rpm is the rpm value that determine if the driver must decrease or increase gear based on the rpm*/
+    /** Engine rotation value that determine if the driver must decreace or increace gear based on the rpm.*/
     int high_rpm;
 
-    /**base_speed is a parameter to determine the driver's speed*/
+    /** Parameter to determine if the driver's speed. */
     float base_speed;
 
-    /**speed_factor is a proportional parameter to determine driver's speed*/
+    /** A proportional parameter to determine driver's speed.*/
     float speed_factor;
 
-    /**current_speed is the driver's speed at the present code execution*/
+    /** The driver's speed at the present code execution.*/
     int current_gear;
 
-    /** distance is the highest value of the 19 track sensors*/
+    /** The highest value of the 19 track sensors.*/
     float distance;
 
-    /** target_speed is the speed the car must reach, it is calculated based on distance, base_speed and speed_factor*/
+    /** The speed the car must reach, it is calculated based on distance, base_speed and speed_factor.*/
     float target_speed;
 
-    /** Check the current_gear and rpm, if the gear and rpm is above a certain value the function authorize decrease gear at one gear
-    * @param current_gear the gear of the car at the moment of execution
-    * @param rpm the value of rpm read by the sensor
-    * @return true if the driver must decrease gear and false if it must not*/
+    /** Checks the current_gear and rpm, if the gear and rpm is above a certain value the function authorizes to decrease gear.
+    * @param current_gear the gear of the car at the moment of execution.
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if the driver must decrease gear and false if it must not.*/
     bool shouldDecreaseGear(int current_gear, int rpm);
 
-    /** Check if rpm is bellow a certain value(low_rpm)
-    * @param rpm the value of rpm read by the sensor
-    * @return true if rpm is bellow low_rpm and false if it is not*/
+    /** Checks if rpm is bellow a certain value (low_rpm).
+    * @param rpm the value of rpm read by the sensor.
+    * @return True if rpm is bellow low_rpm and false if it is not.*/
     bool runningOnLow(int rpm);
 
-    /** Check if rpm is bellow a certain value(average_rpm)
-    * @param rpm the value of rpm read by the sensor
-    * @return true if rpm is bellow average_rpm and false if it is not*/
+    /** Checks if rpm is bellow a certain value (average_rpm).
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if rpm is bellow average_rpm and false if it is not.*/
     bool runningUnderAverage(int rpm);
 
-    /** Check if rpm is above a certain value(high_rpm)
-    * @param rpm the value of rpm read by the sensor
-    * @return true if rpm is above high_rpm and false if it is not*/
+    /** Checks if rpm is above a certain value (high_rpm).
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if rpm is above high_rpm and false if it is not.*/
     bool runningOnHigh(int rpm);
 
-    /** Check if gear is between two value(start_gear and low_gear_limit)
-    * @param rpm the value of rpm read by the sensor
-    * @return true if gear is between start_gear and low_gear_limit, false if it is not*/
+    /** Checks if gear is between two values (start_gear and low_gear_limit).
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if gear is between start_gear and low_gear_limit, false if it is not.*/
     bool isLowGear(int gear);
 
-    /** Check if gear is above a certain value(low_gear_limit)
-    * @param rpm the value of rpm read by the sensor
-    * @return true if gear is above low_gear_limit, false if it is not*/
+    /** Checks if gear is above a certain value (low_gear_limit).
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if gear is above low_gear_limit, false if it is not.*/
     bool isHighGear(int gear);
 
-    /** Check the current_gear and rpm, if the gear and rpm is bellow a certain value the function authorize increase gear at one gear
-    * @param current_gear the gear of the car at the moment of execution
-    * @param rpm the value of rpm read by the sensor
-    * @return true if the driver must increase gear and false if it must not*/
+    /** Checks the current_gear and rpm, if they are bellow a certain value the function authorizes to increase.
+    * @param current_gear the gear of the car at the moment of execution.
+    * @param rpm the value of the engine rotation read by the sensor.
+    * @return True if the driver must increase gear and false if it must not.*/
     bool shouldIncreaseGear(int current_gear, int rpm);
 
-    /** Change the target_speed based on base_speed, speed_factor and distance
-    *@param cs a data structure cointaining information from the car's sensors.*/
+    /** Changes the target_speed based on base_speed, speed_factor and distance.
+    * @param cs a data structure cointaining information from the car's sensors.*/
     void setTargetSpeed(CarState &cs);
 
-    /** isFacingWrongWay verify if the car is driving the right path, once it is possible
+    /** Verifies if the car is driving the right path, once it is possible.
     * that the car collide and turn to the opposite way.
     * @param cs a data structure cointaining information from the car's sensors.*/
     bool isFacingWrongWay(CarState &cs);
 
     /** Find the highest value of the 19 track sensors.
-    *@param cs a data structure cointaining information from the car's sensors.
-    *@return the index of the track sensor with highest value*/
+    * @param cs a data structure cointaining information from the car's sensors.
+    * @return the index of the track sensor with highest value.*/
     float findFarthestDirection(CarState &cs);
 
-    /** It receive angle at radians (0.785398 to -0.785398) and normalize it turning -1 to 1
-    *@param angle a data from the car's sensor angle.
-    *@return a normalized value*/
+    /** It receive angle at radians (0.785398, -0.785398) and normalize it to -1 and 1.
+    * @param angle a data from the car's sensor angle.
+    * @return a normalized value.*/
     float normalizeSteer(float angle);
+    
 };
 
 #endif // FSMDRIVER_STATE_INSIDETRACKA_H

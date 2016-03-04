@@ -60,14 +60,6 @@ Stuck::isStuck(CarState &cs) {
     return (seemsStuck(cs) && !justStartedRace(cs));
 }
 
-/**float
-Stuck::getSteer(float track_initial_pos, CarState &cs){
-    if(abs(cs.getAngle()) > M_PI) // around 180 graus
-        return (track_initial_pos > 0 ? -1 : 1);
-
-    return (track_initial_pos > 0 ? 1 : -1);
-}*/
-
 bool
 Stuck::seemsStuck(CarState &cs) {
     if(cs.getSpeedX() < stuck_speed)
@@ -87,10 +79,8 @@ Stuck::getInitialPos(CarState &cs) {
 }
 
 
-
-
 /**************************************************************************
- * Modularização*/
+ * Modularization*/
 float 
 Stuck::get_steer(CarState &cs) {
     if(abs(cs.getAngle()) > M_PI) // around 180 graus
@@ -101,7 +91,6 @@ Stuck::get_steer(CarState &cs) {
 
 int
 Stuck::get_gear(CarState &cs){
-
     return -1;
 }
 

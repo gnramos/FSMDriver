@@ -80,7 +80,7 @@ float
 InsideTrackA::findFarthestDirection(CarState &cs) {
     float farthestSensor = -INFINITY;
     float farthestDirection = 0;
-       for (int i = 0; i < 19; i++) { /*Percorre os sensores de pista e guarda o de maior valor*/
+       for (int i = 0; i < 19; i++) { 
           if (farthestSensor < cs.getTrack(i)) {
             farthestSensor = cs.getTrack(i);
             farthestDirection = i;
@@ -104,7 +104,7 @@ InsideTrackA::~InsideTrackA() {
 
 
 /**************************************************************************
- * Modularização*/
+ * Modularization*/
 float
 InsideTrackA::get_steer(CarState &cs) {
     return isFacingWrongWay(cs) ? cs.getAngle() : findFarthestDirection(cs);
@@ -123,25 +123,22 @@ InsideTrackA::get_gear(CarState &cs){
     return gear;
 }
 
-/*Possível problema A aceleração simplesmente é 0 ou 1 baseado na velocidade alvo*/
-
-
-
-/** Accelerate if the current speed is under the target_speed.
-Acceleration is proportional to the perceived open space in
-front of the car (considering the 5 front most sensors). */
 float
 InsideTrackA::get_accel(CarState &cs){
     setTargetSpeed(cs);
-    int Front, max10, max20;
+    float Front, max10, max20;
 
     Front = cs.getTrack(10);
     max10 = max(cs.getTrack(9), cs.getTrack(11));
     max20 = max(cs.getTrack(8), cs.getTrack(12));
 
-    float accel = (cs.getSpeedX() > target_speed ? 0 : (Front+max10+max20)/(3*100));
+    float accel = (cs.getSpeedX() > target_speed ? 0 : (Front+max10+max20)/(3*200));
 
-    //printf("%d, %d, %d\n, accel: %.2f", Front, max10, max20, (Front+max10+max20)/(3*100));
+    if(Front >= 70) accel = 1;
+
+    if(Front <= 20 && cs.getSpeedX() <= 30) accel = 1;  /*Resolve o caso em que o carro está preso com a frente voltada para a borda da pista*/
+
+    //printf("%.0f, %.0f, %.0f --> accel: %.2f\n", Front, max10, max20, accel);
 
     return accel ;
 }
@@ -151,7 +148,6 @@ InsideTrackA::get_brake(CarState &cs){
     return cs.getSpeedX() > target_speed ? 0.3 : 0;
 }
 
-/** Always returns 0. */
 float
 InsideTrackA::get_clutch(CarState &cs){
     return 0;
