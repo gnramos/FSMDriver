@@ -138,3 +138,17 @@ float
 InsideTrack::get_clutch(CarState &cs){
     return 0;
 }
+
+
+CarControl
+InsideTrack::drive(CarState &cs) {
+    float steer = get_steer(cs);
+    setTargetSpeed(cs);
+    int gear = get_gear(cs);
+    float accel  = get_accel(cs);
+    float brake = get_brake(cs);
+    float clutch = get_clutch(cs);
+
+    return CarControl(accel, brake, gear, steer, clutch);
+    
+}

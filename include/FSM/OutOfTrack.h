@@ -51,6 +51,12 @@ public:
                int _vg3 = 70, int _vg2 = 40, float _maxra = 0.7,
                float _minra = 0.5);
 
+    /** Defines the driving policy of the state. To work propertly for FSM3, the methos must be called in the order they're shown here.
+    @param cs the driver's perception of the environment. 
+    @return A CarControl with correct values for the actuators.
+    */
+    CarControl drive(CarState &);
+
     /**************************************************************************/
 
     /** Obtains the steering value based on the trackPos sensor from cs, that allow to know which track 

@@ -78,6 +78,14 @@ Stuck::getInitialPos(CarState &cs) {
 	return (track_initial_pos == 0 ? cs.getTrackPos() : track_initial_pos);
 }
 
+float
+Stuck::auxSteer(float track_initial_pos, CarState &cs){
+    if(abs(cs.getAngle()) > M_PI) // around 180 graus
+        return (track_initial_pos > 0 ? -1 : 1);
+
+    return (track_initial_pos > 0 ? 1 : -1);
+}
+
 
 /**************************************************************************
  * Modularization*/
@@ -109,3 +117,24 @@ Stuck::get_clutch(CarState &cs){
     return 0;
 }
 
+CarControl
+Stuck::drive(CarState &cs) {
+    ++elapsed_ticks;
+
+    track_initial_pos = getInitialPos(cs);
+
+    if(notStuckAnymore(cs) || hasBeenStuckLongEnough()) {
+        elapsed_ticks = 0;
+        slow_speed_ticks = 0;
+        track_initial_pos = 0;
+    }
+
+    int gear = get_gear(cs);
+    float accel  = get_accel(cs);
+    float brake = get_brake(cs);
+    float clutch = get_clutch(cs);
+    const int focus = 0, meta = 0;
+    float steer = auxSteer(track_initial_pos, cs);
+
+    return CarControl(accel, brake, gear, steer, clutch, focus, meta);
+}

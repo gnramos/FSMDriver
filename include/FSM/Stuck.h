@@ -48,6 +48,12 @@ public:
      */
     Stuck(float ss = 5.0, int mrd = 100, int mst = 300, int msst = 50);
 
+    /** Defines the driving policy of the state. To work propertly for FSM3, the methos must be called in the order they're shown here.
+    @param cs the driver's perception of the environment. 
+    @return A CarControl with correct values for the actuators.
+    */
+    CarControl drive(CarState &);
+
     /**************************************************************************/
 
     /** Calculates the steering value based on the angle of the controller
@@ -134,7 +140,7 @@ private:
     /**function to determine the steer.
     * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
     * @return -1 or 1 at stuck in order to fast turn to right way.*/
-    float getSteer(float trackInitialPos, CarState &cs);
+    float auxSteer(float trackInitialPos, CarState &cs);
 
     /**Function to determine the track_pos at the begin of stuck state.
     * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.

@@ -49,6 +49,13 @@ public:
     InsideTrack(int _sg = 1, int _lgl = 4, int _lrpm = 1500,
                 int _arpm = 4000, int _hrpm = 9000, float _bs = 83,
                 float _sf = 1.4);
+
+    /** Defines the driving policy of the state. To work propertly for FSM3, the methos must be called in the order they're shown here.
+    @param cs the driver's perception of the environment. 
+    @return A CarControl with correct values for the actuators.
+    */
+    CarControl drive(CarState &);
+    
     /**************************************************************************
     * Modularization*/
 
