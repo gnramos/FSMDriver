@@ -17,10 +17,10 @@ A Makefile is provided in hopes of simplifying the build process. Assuming you'v
 ```bash
 cd path/to/fsmdriver
 make
-make DRIVER=FSMDriver5
+make DRIVER=FSMDriver3
 ```
 
-This creates the default driver executable (```FSMDriver3```) and also ```FSMDriver5```. To test it (assuming you started a properly configured race), just run:
+This creates the default driver executable (```FSMDriver3```). To test it (assuming you started a properly configured race), just run:
 
 ```bash
 ./bin/FSMDriver3
@@ -35,4 +35,4 @@ Documentation (and further explanations) for the code is available in the source
 make info DOC_OUTPUT=/doc/fsmdriver
 ```
 
-Also there is avaiable the work report about the modularization of the (```FSMDriver3```) at the file "Relatório de trabalho.pdf"
+Also there is avaiable the work report about the modularization of the (```FSMDriver3```) at the file "RelatÃ³rio de trabalho.pdf"
