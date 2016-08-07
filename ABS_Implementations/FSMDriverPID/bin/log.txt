@@ -1,0 +1,45 @@
+Inside track: 9869 ticks
+Outside track: 121 ticks
+Stuck: 10 ticks
+
+Ticks: 10001
+Distance Raced: 14620.1 m
+Damage: 439
+
+
+List Of Errors: 
+Indice 0 = 0.675236 Speed Error = 0 Brake = 0
+Indice 1 = 0.67759 Speed Error = 0 Brake = 0.3
+Indice 2 = 0.676192 Speed Error = 0 Brake = 0.3
+Indice 3 = 0.677812 Speed Error = 0 Brake = 0.3
+Indice 4 = 0.67504 Speed Error = 0 Brake = 0.3
+Indice 5 = 0.677438 Speed Error = 0 Brake = 0.3
+Indice 6 = 0.677324 Speed Error = 0 Brake = 0.3
+Indice 7 = 0.677574 Speed Error = 0 Brake = 0.3
+Indice 8 = 0.677371 Speed Error = 0 Brake = 0.3
+Indice 9 = 0.63823 Speed Error = 0 Brake = 0.3
+Indice 10 = 0.67578 Speed Error = 0 Brake = 0.3
+Indice 11 = 0.677739 Speed Error = 0 Brake = 0.3
+Indice 12 = 0.634756 Speed Error = 0 Brake = 0.3
+Indice 13 = 0.634778 Speed Error = 0 Brake = 0.3
+Indice 14 = 0.675715 Speed Error = 0 Brake = 0.3
+Indice 15 = 0.677358 Speed Error = 0 Brake = 0.3
+Indice 16 = 0.677288 Speed Error = 0 Brake = 0.3
+Indice 17 = 0.677414 Speed Error = 0 Brake = 0.3
+Indice 18 = 0.677408 Speed Error = 0 Brake = 0.3
+Indice 19 = 0.723697 Speed Error = 0 Brake = 0.3
+Indice 20 = 0.855906 Speed Error = 0 Brake = 0
+Indice 21 = 0.700372 Speed Error = 0 Brake = 0
+Indice 22 = 0.675715 Speed Error = 0 Brake = 0.3
+Indice 23 = 0.675071 Speed Error = 0 Brake = 0.3
+Indice 24 = 0.677429 Speed Error = 0 Brake = 0.3
+Indice 25 = 0.724305 Speed Error = 0 Brake = 0.3
+Indice 26 = 0.700103 Speed Error = 0 Brake = 0.3
+Indice 27 = 0.696045 Speed Error = 0 Brake = 0
+Indice 28 = 0.748004 Speed Error = 0 Brake = 0.3
+Indice 29 = 0.678584 Speed Error = 0 Brake = 0.3
+Indice 30 = 0.716399 Speed Error = 0 Brake = 0.3
+Indice 31 = 0.678107 Speed Error = 0 Brake = 0.3
+Indice 32 = 0.677507 Speed Error = 0 Brake = 0.3
+Indice 33 = 0.732763 Speed Error = 0 Brake = 0.3
+Indice 34 = 0.703989 Speed Error = 0 Brake = 0.3

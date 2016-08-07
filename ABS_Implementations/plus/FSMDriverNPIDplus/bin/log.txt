@@ -1,0 +1,7 @@
+Inside track: 7362 ticks
+Outside track: 1868 ticks
+Stuck: 770 ticks
+
+Ticks: 10001
+Distance Raced: 3745.48 m
+Damage: 5692
