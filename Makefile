@@ -11,9 +11,6 @@
 # Default driver
 DRIVER ?= FSMDriver3
 
-# Driver superclass
-DRIVER_SUP ?=
-
 # Compiler & flags
 CC       = g++
 CXXFLAGS = -Wall -std=c++11
@@ -30,7 +27,6 @@ TARGET  = $(BIN_DIR)/$(DRIVER)
 CLIENT_INC_DIR = include/client
 DRIVER_INC_DIR = include/$(DRIVER)
 FSM_INC_DIR    = include/FSM
-DRIVER_SUP_INC_DIR = include/$(DRIVER_SUP)
 
 # Source
 CLIENT_SRC_DIR = src/client
@@ -40,8 +36,6 @@ DRIVER_SRC_DIR = src/$(DRIVER)
 DRIVER_SRC     = $(DRIVER).cpp
 FSM_SRC_DIR    = src/FSM
 FSM_SRC        = $(notdir $(wildcard $(FSM_SRC_DIR)/*.cpp))
-DRIVER_SUP_SRC_DIR = src/$(DRIVER_SUP)
-DRIVER_SUP_SRC = $(DRIVER_SUP_SRC_DIR)/$(DRIVER_SUP).cpp
 
 # Info
 DOXYGEN    := $(shell doxygen --version 2>/dev/null)
@@ -54,21 +48,10 @@ DOC_OUTPUT ?= .
 CLIENT_OBJ = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(CLIENT_SRC))
 DRIVER_OBJ = $(OBJ_DIR)/$(DRIVER).o
 FSM_OBJ    = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(FSM_SRC))
-ifneq ($(DRIVER_SUP),)
-
-DRIVER_SUP_OBJ = $(OBJ_DIR)/$(DRIVER_SUP).o
-HEADERS    = $(addprefix -I,$(CLIENT_INC_DIR) $(FSM_INC_DIR) $(DRIVER_INC_DIR) $(DRIVER_SUP_INC_DIR))
-OBJECTS    = $(CLIENT_OBJ) $(FSM_OBJ) $(DRIVER_OBJ) $(DRIVER_SUP_OBJ)
-
-else
-
-HEADERS    = $(addprefix -I,$(CLIENT_INC_DIR) $(FSM_INC_DIR) $(DRIVER_INC_DIR))
-OBJECTS    = $(CLIENT_OBJ) $(FSM_OBJ) $(DRIVER_OBJ)
-
-endif
 
 FLAGS      = $(CXXFLAGS) $(EXTFLAGS)
-
+HEADERS    = $(addprefix -I,$(CLIENT_INC_DIR) $(FSM_INC_DIR) $(DRIVER_INC_DIR))
+OBJECTS    = $(CLIENT_OBJ) $(FSM_OBJ) $(DRIVER_OBJ)
 
 ###########
 # Targets #
@@ -85,17 +68,10 @@ $(OBJ_DIR)/%.o: $(CLIENT_SRC_DIR)/%.cpp
 $(OBJ_DIR)/%.o: $(FSM_SRC_DIR)/%.cpp
 	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(FSM_INC_DIR) -I$(CLIENT_INC_DIR)
 
-ifneq ($(DRIVER_SUP),)
-
-$(DRIVER_SUP_OBJ)/%.o: $(DRIVER_SUP_SRC_DIR)/%.cpp
-	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(DRIVER_SUP_INC_DIR) -I$(FSM_INC_DIR) -I$(CLIENT_INC_DIR)
-
-endif
-
 $(DRIVER_OBJ): $(DRIVER_SRC_DIR)/$(DRIVER_SRC) $(FSM_OBJ)
 	$(CC) -c -o $@ $< $(CXXFLAGS) $(HEADERS)
 
-$(TARGET): dirs $(CLIENT_OBJ) $(DRIVER_OBJ) $ $(BIN_DIR)
+$(TARGET): dirs $(CLIENT_OBJ) $(DRIVER_OBJ) $(BIN_DIR)
 	$(CC) $(FLAGS) -o $(TARGET) $(CLIENT_MAIN) $(HEADERS) $(OBJECTS)
 
 info: $(DOXYFILE)
