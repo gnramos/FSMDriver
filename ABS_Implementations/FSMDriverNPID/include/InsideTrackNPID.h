@@ -87,27 +87,10 @@ public:
     */
     virtual float get_brake(CarState &cs);
 
-    float *get_errors(){
-        return errors_v;
-    }
-    int get_errors_index(){
-        return errors_index;
-    }
-    float *get_speed_errors(){
-        return speed_errors;
-    }
-    float *get_brake_values(){
-        return brake_values;
-    }
-
 private:
     float current_error;
     float last_error;
     float last_integral;
-    float errors_v[10000];
-    float speed_errors[10000];
-    float brake_values[10000];
-    int errors_index = 0;
 
     /** Calculates the integral of the error between the reference and the currently slip ratio, needed in the ABS controller.
     *@return A value that represents the integral of the error for the NPID controller.

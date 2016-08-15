@@ -22,8 +22,6 @@ public:
     *  Constructor of FSMDriverPID. Changes FSMDriver3's Inside Track state with the PID ABS controller implemented. 
     */
     FSMDriverPID();
-
-    void onShutdown();
 };
 
 #endif // FSMDriverABS_H

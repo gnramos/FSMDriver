@@ -28,18 +28,11 @@ float InsideTrackNPID::ABSfilter(CarState &carState){
     float brake;
     get_error(carState);
 
-    /*Se a diferença da velocidade for muito baixa, retorna um valor fixo para o freio(valor utilizado proveniente do FSMDriver3)*/
-    if((carState.getSpeedX() - target_speed) < 8){
-        brake_values[errors_index] = 0.3;
-        return 0.3; 
-    }
-
     brake = Knp * (nonlinear_function(current_error, alpha_p, delta_p) + 
         Tni * nonlinear_function(integral_of_error(), alpha_i, delta_i) + 
         Tnd * nonlinear_function(derivative_of_error(), alpha_d, delta_d));
 
     last_error = current_error;
-    brake_values[errors_index] = brake;
     return brake;
 
 }
@@ -78,9 +71,6 @@ void InsideTrackNPID::get_error(CarState &cs){
 
     slip = total_slip/4.0;
     current_error = REFERENCE_SLIP-slip;
-    errors_v[errors_index] = current_error;
-    speed_errors[errors_index] = cs.getSpeedX() - target_speed;
-    errors_index++;
 }
 
 float InsideTrackNPID::nonlinear_function(float x, float alpha, float delta){

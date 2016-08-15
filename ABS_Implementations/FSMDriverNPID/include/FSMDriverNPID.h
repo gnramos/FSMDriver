@@ -22,8 +22,6 @@ public:
     *   Constructor of FSMDriverNPID. Changes FSMDriver3's Inside Track state with the NPID ABS controller.
     */
     FSMDriverNPID();
-
-    void onShutdown();
 };
 
 #endif // FSMDriverABS_H

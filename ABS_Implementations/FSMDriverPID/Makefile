@@ -25,18 +25,21 @@ OBJ_DIR = obj
 TARGET  = $(BIN_DIR)/FSMDriverPID
 
 # Include directories
-CLIENT_INC_DIR = ../FSMDriver3/include/client
+CLIENT_INC_DIR = ../../include/client
 DRIVER_INC_DIR = include
-FSM_INC_DIR    = ../FSMDriver3/include/include
+FSM_INC_DIR    = ../../include/FSM
+FSM3_INC_DIR   = ../../include/FSMDriver3
 
 # Source
-CLIENT_SRC_DIR = ../FSMDriver3/src/client
+CLIENT_SRC_DIR = ../../src/client
 CLIENT_SRC     = WrapperBaseDriver.cpp SimpleParser.cpp CarState.cpp CarControl.cpp
 CLIENT_MAIN    = $(CLIENT_SRC_DIR)/client.cpp
 DRIVER_SRC_DIR = src
 DRIVER_SRC     = $(notdir $(wildcard $(DRIVER_SRC_DIR)/*.cpp))
-FSM_SRC_DIR    = ../FSMDriver3/src/src
+FSM_SRC_DIR    = ../../src/FSM
 FSM_SRC        = $(notdir $(wildcard $(FSM_SRC_DIR)/*.cpp))
+FSM3_SRC       = ../../src/FSMDriver3/FSMDriver3.cpp
+
 
 
 
@@ -54,9 +57,10 @@ DOC_OUTPUT ?= .
 CLIENT_OBJ = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(CLIENT_SRC))
 DRIVER_OBJ = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(DRIVER_SRC))
 FSM_OBJ    = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(FSM_SRC))
+FSM3_OBJ   = $(OBJ_DIR)/FSMDriver3.o
 
-HEADERS    = $(addprefix -I,$(CLIENT_INC_DIR) $(FSM_INC_DIR) $(DRIVER_INC_DIR))
-OBJECTS    = $(CLIENT_OBJ) $(FSM_OBJ) $(DRIVER_OBJ)
+HEADERS    = $(addprefix -I,$(CLIENT_INC_DIR) $(FSM_INC_DIR) $(DRIVER_INC_DIR) $(FSM3_INC_DIR))
+OBJECTS    = $(CLIENT_OBJ) $(FSM_OBJ) $(FSM3_OBJ) $(DRIVER_OBJ)
 
 FLAGS      = $(CXXFLAGS) $(EXTFLAGS)
 
@@ -71,16 +75,19 @@ dirs:
 	@mkdir -p $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(CLIENT_SRC_DIR)/%.cpp
-	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(CLIENT_INC_DIR)
+	$(CC) -c -o $@ $< $(CXXFLAGS) -I $(CLIENT_INC_DIR)
 
 $(OBJ_DIR)/%.o: $(FSM_SRC_DIR)/%.cpp
-	$(CC) -c -o $@ $< $(CXXFLAGS) -I$(FSM_INC_DIR) -I$(CLIENT_INC_DIR)
+	$(CC) -c -o $@ $< $(CXXFLAGS) -I $(FSM_INC_DIR) -I $(CLIENT_INC_DIR)
+
+$(OBJ_DIR)/FSMDriver3.o: $(FSM3_SRC)
+	$(CC) -c -o $@ $< $(CXXFLAGS) -I $(FSM_INC_DIR) -I $(CLIENT_INC_DIR) -I $(FSM3_INC_DIR)
 
 #$(DRIVER_OBJ): $(DRIVER_SRC_DIR)/$(DRIVER_SRC) $(FSM_OBJ)
 $(OBJ_DIR)/%.o: $(DRIVER_SRC_DIR)/%.cpp $(FSM_OBJ)
 	$(CC) -c -o $@ $< $(CXXFLAGS) $(HEADERS)
 
-$(TARGET): dirs $(CLIENT_OBJ) $(DRIVER_OBJ) $ $(BIN_DIR)
+$(TARGET): dirs $(CLIENT_OBJ) $(DRIVER_OBJ) $(FSM3_OBJ) $ $(BIN_DIR)
 	$(CC) $(FLAGS) -o $(TARGET) $(CLIENT_MAIN) $(HEADERS) $(OBJECTS)
 
 info: $(DOXYFILE)

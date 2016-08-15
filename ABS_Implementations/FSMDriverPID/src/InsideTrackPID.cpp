@@ -22,11 +22,6 @@ float InsideTrackPID::ABSfilter(CarState &carState){
     float brake;
     get_error(carState);
 
-     if((carState.getSpeedX() - target_speed) < 8){
-        brake_values[errors_index] = 0.3;
-        return 0.3; 
-    }
-
     brake = Kp * (current_error + Ti * integral_of_error() + Td * derivative_of_error()); 
 
     last_error = current_error;
@@ -60,7 +55,6 @@ float InsideTrackPID::integral_of_error(){
 void InsideTrackPID::get_error(CarState &cs){
     int i;
     float total_slip = 0;
-    float slip;
     float speed = cs.getSpeedX()/3.6;
 
     for (i = 0; i < 4; i++) {
@@ -68,9 +62,4 @@ void InsideTrackPID::get_error(CarState &cs){
     }
 
     slip = total_slip/4.0;
-
-    current_error = REFERENCE_SLIP-slip;
-    errors_v[errors_index] = current_error;
-    speed_errors[errors_index] = cs.getSpeedX() - target_speed;
-    errors_index++;
 }
