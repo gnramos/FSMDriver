@@ -72,3 +72,10 @@ OutOfTrack::~OutOfTrack() {
     /* Nothing. */
 }
 
+CarControl
+OutOfTrack::drive(CarState &cs) {
+    const float clutch = 0;
+    const int focus = 0, meta = 0;
+
+    return CarControl(get_accel(cs), get_brake(cs), get_gear(cs), get_steer(cs), clutch, focus, meta);
+}
