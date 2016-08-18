@@ -11,8 +11,7 @@
 #include "InsideTrack.h"
 
 InsideTrack::InsideTrack(int _sg, int _lgl, int _lrpm, int _arpm,
-                         int _hrpm, float _bs, float _sf) {
-
+                         int _hrpm, float _bs, float _sf): DrivingState(){
     setParameters(_sg, _lgl, _lrpm, _arpm, _hrpm, _bs, _sf);
 }
 

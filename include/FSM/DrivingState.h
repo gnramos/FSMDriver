@@ -38,12 +38,17 @@ public:
     virtual void exit();
 
 
+    int get_ticks_in_state();
+
+    void add_ticks_in_state();
+
 
 /**************************************************************************
  * Modularization*/
 
 /* Modular virtual methods, should be implemented in each state.*/
 protected:
+    int ticks_in_state;
 
     /** Defines the steering angle value output according to the car's perception of the environment.
     * 
@@ -74,7 +79,6 @@ protected:
      * @param cs A CarState data structure that describes the car's perception of the environment by it's sensors information.
      * @return The clutch intensity [0, 1], 0 means no clutch, 1 full clutch. */
     virtual float get_clutch(CarState &cs) = 0;
-
 };
 
 #endif // UNB_FSMDRIVER_DRIVING_STATE_H

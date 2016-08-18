@@ -11,7 +11,7 @@
 #include "Stuck.h"
 
 Stuck::Stuck(float ss, int mrd, int mst, int msst)
-            : elapsed_ticks(0), slow_speed_ticks(0), track_initial_pos(0) {
+            : DrivingState(), elapsed_ticks(0), slow_speed_ticks(0), track_initial_pos(0) {
     stuck_speed = ss;
     minimum_distance_raced = mrd;
     maximum_number_of_ticks_stuck = mst;

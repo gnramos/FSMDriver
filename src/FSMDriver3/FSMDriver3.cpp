@@ -26,7 +26,10 @@ int signum(float n) {
 *FSMDriver3 Constructor: it initilize at straightline state in the begining of the race, here the parameters are set with fixed values.
 */
 FSMDriver3::FSMDriver3() {
-    changeTo(&inside_track);
+    inside_track = new InsideTrack();
+    out_of_track = new OutOfTrack();
+    stuck = new Stuck();
+    changeTo(inside_track);
     tested = UNKNOWN;
 }
 
@@ -39,62 +42,45 @@ void
 FSMDriver3::onShutdown() {
     cout << "End of race!" << endl;
     cout << this->trackName << endl;
-    // Write file, online learning
-    if(string(this->trackName) != string("unknown")) {
-        Knowledge aux[memory.size()];
-
-        for (unsigned int i = 0; i < memory.size(); ++i)
-        {
-            aux[i] = memory.at(i);
-        }
-
-        ofstream outfile;
-        string str(this->trackName);
-        str += ".bin";
-        outfile.open(str.c_str(), ios::binary | ios::out);
-        outfile.write(reinterpret_cast<const char*>(&aux[0]), memory.size()*sizeof(Knowledge));
-        outfile.close();
-        cout << "landmarks " << memory.size()*sizeof(Knowledge) << endl;
-    }
     cout << "End of race!" << endl;
+
+    ofstream logFile("log.txt", ios::trunc);
+
+    if(!logFile){
+        cout << "Impossível de gerar log.txt";
+    }
+    else{
+        logFile << "Inside track: " << ticks_on_inside_track << " ticks" << endl;
+        logFile << "Outside track: " << ticks_on_out_of_track << " ticks" << endl;
+        logFile << "Stuck: " << ticks_on_stuck << " ticks" << endl;
+        logFile << "\nTicks: " << gameTicks << endl;
+        logFile << "Distance Raced: " << distRaced << " m" << endl;
+        logFile << "Damage: " << damage << endl;
+        logFile.close();
+    }
 }
 /**
 * Initializing the NUM_SENSORS track's angles using a gausian configuration, in order to make more sensors directed to the front of the car and consequently improve a curve detection 
 */
 void
 FSMDriver3::init(float *angles){
+    gameTicks = 0;
     for (int i = 0; i < NUM_SENSORS; ++i)
         angles[i]=signum((i*1.0/3)-3)*exp(-(0.5)*powf((((i+9)%18)*1.0/3)-3, 2))*90;
-
-    // Read the file, online learning
-    string trackFile = this->trackName;
-    trackFile += ".bin";
-    cout << trackFile << endl;
-    ifstream infile(trackFile.c_str(), ios::in | ios::binary);
-    if(!infile.is_open()) return;
-
-    infile.seekg (0, ios::end);
-    const size_t count = infile.tellg() / sizeof(Knowledge);
-    infile.seekg(0, ifstream::beg);
-    memory.resize(count);
-    infile.read(reinterpret_cast<char*>(&memory[0]), count*sizeof(Knowledge));
-    infile.close();
-
-    cout << "Read the file, online learning " << count << endl;
 }
 
 /** Parameters Evolved with Genetic Algorithm. */
 void FSMDriver3::setROAD() {
-        inside_track.setParameters(1, 2, 6956, 3728, 9411, 84.131, 0.973418);
-        out_of_track.setParameters(32.0151, 0.146842, 165, 129, 368, 0.159876, 0.0839129);
-        stuck.setParameters(5, 100, 300, 50);
+        inside_track->setParameters(1, 2, 6956, 3728, 9411, 84.131, 0.973418);
+        out_of_track->setParameters(32.0151, 0.146842, 165, 129, 368, 0.159876, 0.0839129);
+        stuck->setParameters(5, 100, 300, 50);
 }
 
 /** Parameters Evolved with Genetic Algorithm. */
 void FSMDriver3::setDIRT() {
-        inside_track.setParameters(1, 4, 1796, 1857, 4340, 94.5951, 0.962757);
-        out_of_track.setParameters(395.807, 0.0439577, 114, 113, 251, 0.0753426, 0.534217);
-        stuck.setParameters(5, 100, 300, 50);
+        inside_track->setParameters(1, 4, 1796, 1857, 4340, 94.5951, 0.962757);
+        out_of_track->setParameters(395.807, 0.0439577, 114, 113, 251, 0.0753426, 0.534217);
+        stuck->setParameters(5, 100, 300, 50);
 }
 
 /** The transition choose the most fitted state at the moment of the race. */
@@ -102,6 +88,46 @@ void
 FSMDriver3::transition(CarState &cs) {
     DrivingState *state = current_state;
 
+    if(gameTicks <= 10000){
+        distRaced = cs.getDistRaced();
+        ticks_on_inside_track = inside_track->get_ticks_in_state();
+        ticks_on_stuck = stuck->get_ticks_in_state();
+        ticks_on_out_of_track = out_of_track->get_ticks_in_state();
+        damage = cs.getDamage();
+        gameTicks += 1;
+    }/*
+    else if(gameTicks == 10000){
+        distRaced = cs.getDistRaced();
+        gameTicks+=1;
+        ticks_on_inside_track = inside_track->get_ticks_in_state();
+        ticks_on_stuck = stuck->get_ticks_in_state();
+        ticks_on_out_of_track = out_of_track->get_ticks_in_state();
+        damage = cs.getDamage();
+    }*/
+
+    setTrackType();
+
+    if(stuck->isStuck(cs)) {
+        state = stuck;
+    } else {
+        if (cs.getTrack(1) > 0)
+            state = inside_track;
+        else {
+            state = out_of_track;
+        }
+    }
+
+    if (current_state != state) changeTo(state);
+}
+
+FSMDriver3::~FSMDriver3() {
+    delete inside_track;
+    delete out_of_track;
+    delete stuck;
+}
+
+
+void FSMDriver3::setTrackType(){
     static bool flag = false;
 
     if((road_or_dirt == "ROAD") && (flag == false)) {
@@ -136,24 +162,5 @@ FSMDriver3::transition(CarState &cs) {
         if(line == string("ROAD"))  setROAD();
         else if(line == string("DIRT")) setDIRT();
     }
-
-    if(stuck.isStuck(cs)) {
-        state = &stuck;
-    } else {
-        if (cs.getTrack(1) > 0)
-            state = &inside_track;
-        else {
-            if(cs.getSpeedX() > 85) {
-                memory.push_back(Knowledge(abs(cs.getSpeedX())*0.9, cs.getDistFromStart()));
-                sort(memory.begin(), memory.end(), Knowledge::aux_sort);
-            }
-            state = &out_of_track;
-        }
-    }
-
-    if (current_state != state) changeTo(state);
 }
 
-FSMDriver3::~FSMDriver3() {
-    /* Nothing */
-}

@@ -1,7 +1,7 @@
 FSMDriver
 =========
 
-A driver implementation using a Finite State Machine implemented with modules to control its actions.
+A driver implementation using a Finite State Machine implementation to control its actions.
 
 Main ideia
 --------------------

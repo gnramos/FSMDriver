@@ -83,6 +83,7 @@ public:
     /** It recives the cs and calculates the clutch, always returning 0.
     *@param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
     *@return Always 0. */
+
     virtual float get_clutch(CarState &cs);
 
     /**************************************************************************/

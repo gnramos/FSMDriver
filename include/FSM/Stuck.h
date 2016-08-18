@@ -61,6 +61,22 @@ public:
     * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
     * @return -1 or 1 at stuck in order to fast turn to right way. */
     virtual float get_steer(CarState &cs);
+    /** get_gear receives cs and returns the back gear
+    * @param cs the driver's perception of the environment.
+    * @return -1
+    */
+    virtual int get_gear(CarState &cs);
+    /** get_accel recives cs and returns full accel
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 1
+    */
+    virtual float get_accel(CarState &cs);
+    /** get_brake recives cs and return no brake
+    *@param cs a data structure cointaining information from the car's sensors.
+    *@return 0 
+    */
+    virtual float get_brake(CarState &cs);
+
 
     /** Receives cs and returns the reverse gear.
     * @param cs A data structure cointaining information from the car's sensors, the driver's perception of the environment.
